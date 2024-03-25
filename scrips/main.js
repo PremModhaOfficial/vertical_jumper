@@ -1,8 +1,8 @@
 
-canvas = document.getElemnt
+const canvas = document.querySelector('canvas');
 
 // Get the 2D context
-ctx = canvas.getContext("2d");
+const c = canvas.getContext("2d");
 
 
 for (var i = 0; i < 100; i++) {
