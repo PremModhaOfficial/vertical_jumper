@@ -1,18 +1,8 @@
-
 const canvas = document.querySelector('canvas');
-
-// Get the 2D context
 const c = canvas.getContext("2d");
 
+canvas.width = 1024;
+canvas.height = 576;
 
-for (var i = 0; i < 100; i++) {
-    ctx.fillStyle = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
-    ctx.fillRect(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), 10, 10);
-  console.log("i: " + i);
-}
-
-function draw() {
-    ctx.fillStyle = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
-    ctx.fillRect(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), 10, 10);
-    console.log("draw");
- }
+c.fillStyle = 'white'
+c.fillRect(0, 0, canvas.width, canvas.height);
