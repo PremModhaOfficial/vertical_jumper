@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext("2d");
 
-const GRAVITY = .5;
+const GRAVITY = .1;
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -40,7 +40,8 @@ platformCollisions2d.forEach((row, y) => {
                     position: {
                         x: x * 16,
                         y: y * 16,
-                    }
+                    },
+                    height : 4
                 }))
         }
     })
@@ -49,12 +50,55 @@ platformCollisions2d.forEach((row, y) => {
 const player = new Player({
     position: {
         x: 100,
-        y: 200,
+        y: 300,
     },
     collisionBlocks,
     platformCollisionBlocks,
     imageSource: "scrips/assets/warrior/Idle.png",
-    frameRate: 8
+    frameRate: 8,
+    animation : {
+        Idle: {
+            imageSource: "scrips/assets/warrior/Idle.png",
+            frameRate: 8,
+            frameBuffer: 3,
+        },
+        IdleLeft: {
+            imageSource: "scrips/assets/warrior/IdleLeft.png",
+            frameRate: 8,
+            frameBuffer: 3,
+        },
+        Run: {
+            imageSource: "scrips/assets/warrior/Run.png",
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        RunLeft: {
+            imageSource: "scrips/assets/warrior/RunLeft.png",
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        Fall: {
+            imageSource: "scrips/assets/warrior/Fall.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        FallLeft: {
+            imageSource: "scrips/assets/warrior/FallLeft.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        JumpLeft: {
+            imageSource: "scrips/assets/warrior/JumpLeft.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        Jump: {
+            imageSource: "scrips/assets/warrior/Jump.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+
+    }
 });
 
 const keys = {
@@ -75,6 +119,14 @@ const background = new Sprite({
     imageSource: "scrips/background.png",
 })
 
+const backgroundImageHeight = 432
+const camera ={
+    position:{
+        x: 0,
+        y: -backgroundImageHeight + scaledCanvas.height,
+    },
+}
+
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'white'
@@ -82,24 +134,47 @@ function animate() {
 
     c.save()
     c.scale(4, 4)
-    c.translate(0, -background.image.height + scaledCanvas.height)
+    c.translate(camera.position.x, camera.position.y)
     background.update()
 
-    collisionBlocks.forEach(collisionBlock => {
-        collisionBlock.update()
-    })
+    // collisionBlocks.forEach(collisionBlock => {
+    //     collisionBlock.update()
+    // })
+    //
+    // platformCollisionBlocks.forEach(collisionBlock => {
+    //     collisionBlock.update()
+    // })
+    player.checkForHorizontalCanvasCollisions()
+    player.update();
 
-    platformCollisionBlocks.forEach(collisionBlock => {
-        collisionBlock.update()
-    })
     player.velocity.x = 0
-
     if (keys.a.pressed) {
+        player.swapSprite('RunLeft')
         player.velocity.x = -5;
+        player.lastDirection = 'left'
+        player.shouldPanCameraToRight({canvas,camera})
     } else if (keys.d.pressed) {
+        player.swapSprite('Run')
         player.velocity.x = 5;
+        player.lastDirection = 'right'
+        player.shouldPanCameraToLeft({canvas,camera})
+    } else if (player.velocity.y === 0) {
+        if (player.lastDirection === 'right')
+        player.swapSprite('Idle')
+        else player.swapSprite('IdleLeft')
     }
-    player.update()
+    if (player.velocity.y > 0) {
+        player.shouldPanCameraUp({canvas,camera})
+        if (player.lastDirection === 'right') {
+            player.swapSprite('Fall');
+        } else player.swapSprite('FallLeft')
+    } else if (player.velocity.y < 0) {
+        player.shouldPanCameraDown({canvas,camera})
+        if (player.lastDirection === 'right')
+        player.swapSprite('Jump');
+        else player.swapSprite('JumpLeft')
+    }
+
     c.restore()
 }
 
@@ -116,7 +191,7 @@ window.addEventListener('keydown', (event) => {
             break
 
         case 'w':
-            player.velocity.y = -10;
+            player.velocity.y = -4;
             break
     }
 })
