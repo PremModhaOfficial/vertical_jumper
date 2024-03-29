@@ -6,59 +6,60 @@ const GRAVITY = .5;
 canvas.width = 1024;
 canvas.height = 576;
 
-class Player {
-    constructor(position) {
-        this.height = 100
-        this.position = position
-        this.velocity = {
-            x: 0,
-            y: 1,
+const floorCollisions2d = []
+for (let i = 0; i < floorCollisions.length; i += 36) {
+    floorCollisions2d.push(floorCollisions.slice(i, i + 36))
+}
+
+const platformCollisions2d = []
+for (let i = 0; i < platformCollisions.length; i += 36) {
+    platformCollisions2d.push(platformCollisions.slice(i, i + 36))
+}
+
+const collisionBlocks = []
+floorCollisions2d.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 202) {
+            collisionBlocks.push(
+                new CollisionBlock({
+                    position: {
+                        x: x * 16,
+                        y: y * 16,
+                    }
+                }))
         }
-    }
-
-    draw() {
-        c.fillStyle = 'red';
-        c.fillRect(this.position.x, this.position.y, 100, this.height);
-    }
-
-    update() {
-        this.draw()
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
-        if (this.position.y + this.height < canvas.height) this.velocity.y += GRAVITY;
-        else this.velocity.y = 0
-    }
-}
-
-class Sprite {
-    constructor({position, imageSource}) {
-        this.position = position
-        this.image = new Image()
-        this.image.src = imageSource
-    }
-
-    draw() {
-        if (!this.image) return
-        c.drawImage(this.image, this.position.x, this.position.y)
-    }
-
-    update() {
-        this.draw()
-    }
-}
-
-const player = new Player({
-    x: 300,
-    y: 100,
+    })
 })
 
+const platformCollisionBlocks = []
+platformCollisions2d.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 202) {
+            platformCollisionBlocks.push(
+                new CollisionBlock({
+                    position: {
+                        x: x * 16,
+                        y: y * 16,
+                    }
+                }))
+        }
+    })
+})
+
+const player = new Player({
+    position: {
+        x: 100,
+        y: 200,
+    },
+    collisionBlocks,
+    platformCollisionBlocks,
+    imageSource: "scrips/assets/warrior/Idle.png",
+    frameRate: 8
+});
+
 const keys = {
-    d: {
-        pressed: false,
-    },
-    a: {
-        pressed: false,
-    },
+    d: {pressed: false,},
+    a: {pressed: false,},
 }
 
 const scaledCanvas = {
@@ -71,29 +72,35 @@ const background = new Sprite({
         x: 0,
         y: 0,
     },
-    imageSource: "scrips/background.png",})
+    imageSource: "scrips/background.png",
+})
 
 function animate() {
     window.requestAnimationFrame(animate)
-
-
-
     c.fillStyle = 'white'
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.save()
-    c.scale(4,4)
-    c.translate(0,-background.image.height + scaledCanvas.height)
+    c.scale(4, 4)
+    c.translate(0, -background.image.height + scaledCanvas.height)
     background.update()
-    c.restore()
 
-    player.update()
+    collisionBlocks.forEach(collisionBlock => {
+        collisionBlock.update()
+    })
 
+    platformCollisionBlocks.forEach(collisionBlock => {
+        collisionBlock.update()
+    })
     player.velocity.x = 0
 
-
-    if (keys.d.pressed) player.velocity.x = 5;
-    else if (keys.a.pressed) player.velocity.x = -5;
+    if (keys.a.pressed) {
+        player.velocity.x = -5;
+    } else if (keys.d.pressed) {
+        player.velocity.x = 5;
+    }
+    player.update()
+    c.restore()
 }
 
 animate()
@@ -109,7 +116,7 @@ window.addEventListener('keydown', (event) => {
             break
 
         case 'w':
-            player.velocity.y = -15;
+            player.velocity.y = -10;
             break
     }
 })
