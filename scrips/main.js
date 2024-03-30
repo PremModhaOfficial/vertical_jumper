@@ -137,13 +137,16 @@ function animate() {
     c.translate(camera.position.x, camera.position.y)
     background.update()
 
+    ////////// Demo
+
     // collisionBlocks.forEach(collisionBlock => {
     //     collisionBlock.update()
     // })
-    //
     // platformCollisionBlocks.forEach(collisionBlock => {
     //     collisionBlock.update()
     // })
+    //
+    //////////
     player.checkForHorizontalCanvasCollisions()
     player.update();
 

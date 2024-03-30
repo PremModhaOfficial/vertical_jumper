@@ -79,10 +79,12 @@ class Player extends Sprite {
         this.updateHitbox()
         this.updateCameraBox()
 
-        // for hitbox
+
+        // Demo
+        // // for hitbox
         // c.fillStyle = 'rgba(0,0,255,.2)'
         // c.fillRect(this.camaraBox.position.x, this.camaraBox.position.y, this.camaraBox.width, this.camaraBox.height)
-
+        //
         // // for image
         // c.fillStyle = 'rgba(0,255,0,.2)'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
