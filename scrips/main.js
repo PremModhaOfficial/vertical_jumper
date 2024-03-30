@@ -2,6 +2,7 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext("2d");
 
 const GRAVITY = .1;
+const DEVMODE = false
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -139,13 +140,14 @@ function animate() {
 
     ////////// Demo
 
-    // collisionBlocks.forEach(collisionBlock => {
-    //     collisionBlock.update()
-    // })
-    // platformCollisionBlocks.forEach(collisionBlock => {
-    //     collisionBlock.update()
-    // })
-    //
+    if (DEVMODE) {
+        collisionBlocks.forEach(collisionBlock => {
+            collisionBlock.update()
+        });
+        platformCollisionBlocks.forEach(collisionBlock => {
+            collisionBlock.update()
+        })
+    }
     //////////
     player.checkForHorizontalCanvasCollisions()
     player.update();
@@ -195,7 +197,7 @@ window.addEventListener('keydown', (event) => {
 
         case 'w':
             if (player.velocity.y === 0)
-            player.velocity.y = -4; // jump
+                player.velocity.y = -4; // jump
             break
     }
 })

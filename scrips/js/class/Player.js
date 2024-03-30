@@ -82,15 +82,17 @@ class Player extends Sprite {
 
         // Demo
         // // for hitbox
-        // c.fillStyle = 'rgba(0,0,255,.2)'
-        // c.fillRect(this.camaraBox.position.x, this.camaraBox.position.y, this.camaraBox.width, this.camaraBox.height)
-        //
-        // // for image
-        // c.fillStyle = 'rgba(0,255,0,.2)'
-        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // // for hitbox
-        // c.fillStyle = 'rgba(255,0,0,.2)'
-        // c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
+        if (DEVMODE) {
+        c.fillStyle = 'rgba(0,0,255,.2)'
+        c.fillRect(this.camaraBox.position.x, this.camaraBox.position.y, this.camaraBox.width, this.camaraBox.height);
+
+        // for image
+        c.fillStyle = 'rgba(0,255,0,.2)'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // for hitbox
+        c.fillStyle = 'rgba(255,0,0,.2)'
+        c.fillRect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.width, this.hitbox.height)
+        }
 
         this.position.x += this.velocity.x;
 
