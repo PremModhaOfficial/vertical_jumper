@@ -41,7 +41,7 @@ platformCollisions2d.forEach((row, y) => {
                         x: x * 16,
                         y: y * 16,
                     },
-                    height : 4
+                    height: 4
                 }))
         }
     })
@@ -56,7 +56,7 @@ const player = new Player({
     platformCollisionBlocks,
     imageSource: "scrips/assets/warrior/Idle.png",
     frameRate: 8,
-    animation : {
+    animation: {
         Idle: {
             imageSource: "scrips/assets/warrior/Idle.png",
             frameRate: 8,
@@ -120,8 +120,8 @@ const background = new Sprite({
 })
 
 const backgroundImageHeight = 432
-const camera ={
-    position:{
+const camera = {
+    position: {
         x: 0,
         y: -backgroundImageHeight + scaledCanvas.height,
     },
@@ -152,26 +152,26 @@ function animate() {
         player.swapSprite('RunLeft')
         player.velocity.x = -5;
         player.lastDirection = 'left'
-        player.shouldPanCameraToRight({canvas,camera})
+        player.shouldPanCameraToRight({canvas, camera})
     } else if (keys.d.pressed) {
         player.swapSprite('Run')
         player.velocity.x = 5;
         player.lastDirection = 'right'
-        player.shouldPanCameraToLeft({canvas,camera})
+        player.shouldPanCameraToLeft({canvas, camera})
     } else if (player.velocity.y === 0) {
         if (player.lastDirection === 'right')
-        player.swapSprite('Idle')
+            player.swapSprite('Idle')
         else player.swapSprite('IdleLeft')
     }
     if (player.velocity.y > 0) {
-        player.shouldPanCameraUp({canvas,camera})
+        player.shouldPanCameraUp({canvas, camera})
         if (player.lastDirection === 'right') {
             player.swapSprite('Fall');
         } else player.swapSprite('FallLeft')
     } else if (player.velocity.y < 0) {
-        player.shouldPanCameraDown({canvas,camera})
+        player.shouldPanCameraDown({canvas, camera})
         if (player.lastDirection === 'right')
-        player.swapSprite('Jump');
+            player.swapSprite('Jump');
         else player.swapSprite('JumpLeft')
     }
 
@@ -191,7 +191,8 @@ window.addEventListener('keydown', (event) => {
             break
 
         case 'w':
-            player.velocity.y = -4;
+            if (player.velocity.y === 0)
+            player.velocity.y = -4; // jump
             break
     }
 })
